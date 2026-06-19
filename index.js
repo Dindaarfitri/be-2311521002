@@ -167,6 +167,7 @@ app.get('/schema', (req, res) => {
     ],
     endpoints: {
       list: "/foods",
+      search: "/foods?search={keyword}",
       detail: "/foods/:id",
       create: "/foods",
       update: "/foods/:id",
@@ -176,13 +177,28 @@ app.get('/schema', (req, res) => {
 });
 
 /* =========================
-   GET ALL FOODS
+   GET ALL FOODS (with search)
 ========================= */
 app.get('/foods', async (req, res) => {
   try {
-    const [rows] = await pool.query(
-      'SELECT * FROM foods ORDER BY id DESC'
-    );
+    const { search } = req.query;
+    let rows;
+
+    if (search && String(search).trim() !== '') {
+      const keyword = `%${String(search).trim()}%`;
+      [rows] = await pool.query(
+        `SELECT * FROM foods 
+         WHERE nama_makanan LIKE ? 
+            OR kategori LIKE ? 
+            OR deskripsi LIKE ? 
+         ORDER BY id DESC`,
+        [keyword, keyword, keyword]
+      );
+    } else {
+      [rows] = await pool.query(
+        'SELECT * FROM foods ORDER BY id DESC'
+      );
+    }
 
     res.json({
       status: 'success',
