@@ -102,18 +102,77 @@ app.get('/health', async (req, res) => {
     conn.release();
 
     res.json({
-      status: 'success',
-      message: 'Backend OK',
-      database: 'connected'
+      status: "success",
+      message: "Backend is running",
+      database: "connected",
+      student: {
+        name: "Dinda Arfitri",
+        nim: "2311521002"
+      }
     });
 
   } catch (err) {
     res.status(500).json({
-      status: 'error',
-      message: err.message,
-      database: 'disconnected'
+      status: "error",
+      message: "Backend is running, but database is not connected",
+      database: "disconnected",
+      student: {
+        name: "Dinda Arfitri",
+        nim: "2311521002"
+      }
     });
   }
+});
+
+app.get('/schema', (req, res) => {
+  res.json({
+    student: {
+      name: "Dinda Arfitri",
+      nim: "2311521002"
+    },
+    resource: {
+      name: "foods",
+      label: "Data Makanan",
+      description: "Aplikasi untuk mengelola data makanan"
+    },
+    fields: [
+      {
+        name: "nama_makanan",
+        label: "Nama Makanan",
+        type: "text",
+        required: true,
+        showInTable: true
+      },
+      {
+        name: "kategori",
+        label: "Kategori",
+        type: "text",
+        required: true,
+        showInTable: true
+      },
+      {
+        name: "harga",
+        label: "Harga",
+        type: "number",
+        required: true,
+        showInTable: true
+      },
+      {
+        name: "deskripsi",
+        label: "Deskripsi",
+        type: "text",
+        required: false,
+        showInTable: true
+      }
+    ],
+    endpoints: {
+      list: "/foods",
+      detail: "/foods/:id",
+      create: "/foods",
+      update: "/foods/:id",
+      delete: "/foods/:id"
+    }
+  });
 });
 
 /* =========================
