@@ -166,13 +166,12 @@ app.get('/schema', (req, res) => {
       }
     ],
     endpoints: {
-      list: "/foods",
-      search: "/foods?search={keyword}",
-      detail: "/foods/:id",
-      create: "/foods",
-      update: "/foods/:id",
-      delete: "/foods/:id"
-    }
+        list: "/foods", 
+        detail: "/foods/{id}",   
+        create: "/foods", 
+        update: "/foods/{id}",   
+        delete: "/foods/{id}"    
+      }
   });
 });
 
